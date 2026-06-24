@@ -4,8 +4,7 @@ import jwt
 
 from urllib.parse import urlencode
 
-from fastapi import HTTPException
-from fastapi import APIRouter
+from fastapi import HTTPException, APIRouter, Depends
 from fastapi.responses import RedirectResponse
 
 from datetime import datetime, timedelta, timezone
@@ -15,6 +14,7 @@ from sqlalchemy import select
 from app.core.config import settings
 from app.core.database import async_session
 from app.models.user import User
+from app.dependencies.auth import get_current_user
 
 router = APIRouter()
 
@@ -90,3 +90,7 @@ async def github_callback(code: str, state: str):
         max_age=7 * 24 * 60 * 60
     )
     return response
+
+@router.get("/me")
+def get_me(user: dict = Depends(get_current_user)):
+    return {"login": user["login"]}
