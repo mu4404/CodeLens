@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     github_client_id: str = ""
     github_client_secret: str = ""
 
+    # GitHub Webhook
+    github_webhook_secret: str = ""
+
     # JWT
     jwt_secret: str = ""
 
