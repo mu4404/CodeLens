@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 
 export async function apiFetch(path: string) {
   const token = cookies().get("access_token")?.value;
@@ -11,6 +11,10 @@ export async function apiFetch(path: string) {
 
   if (response.status === 401) {
     redirect("/");
+  }
+
+  if (response.status === 404) {
+    notFound();
   }
 
   if (!response.ok) {
