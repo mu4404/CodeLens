@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     # GitHub Webhook
     github_webhook_secret: str = ""
 
+    # GitHub Bot Token
+    github_bot_token: str = ""
+
     # JWT
     jwt_secret: str = ""
 
