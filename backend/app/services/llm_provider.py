@@ -2,7 +2,7 @@ from app.core.config import settings
 from app.services import openai_provider
 
 
-def generate_code_review(diff_text: str) -> str:
+def generate_code_review(diff_text: str) -> dict:
     if settings.llm_provider == "openai":
         return openai_provider.generate_code_review(diff_text)
 

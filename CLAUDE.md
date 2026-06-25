@@ -235,7 +235,7 @@ FRONTEND_URL=http://localhost:3000
 
 ## 아직 결정되지 않은 사항 (TODO)
 
-- [ ] DB 스키마 설계 (`users`, `repositories`, `reviews`, `review_comments`)
+- [x] DB 스키마 설계 — `users`, `reviews`, `review_issues` 완료. `repositories` 테이블은 1.2(저장소 연동) 구현 시 추가 필요
 - [ ] GitHub Webhook 수신 및 서명 검증 (`X-Hub-Signature-256`)
 - [ ] PR diff 파싱 로직
 - [ ] LLM 프롬프트 설계 (심각도 분류 기준 포함, provider 공통 사용 가능하도록)
