@@ -65,11 +65,11 @@
 
 ### AI / 외부 연동
 
-| 역할        | 기술                                     |
-| ----------- | ---------------------------------------- |
-| LLM         | Anthropic Claude API (claude-sonnet-4-6) |
-| GitHub 연동 | GitHub REST API v3                       |
-| 인증        | GitHub OAuth 2.0                         |
+| 역할        | 기술                                                        |
+| ----------- | ----------------------------------------------------------- |
+| LLM         | OpenAI API (1차 구현) — `LLM_PROVIDER` env로 전환 가능한 provider 추상화. Claude API는 추후 두 번째 provider로 추가 예정 |
+| GitHub 연동 | GitHub REST API v3                                           |
+| 인증        | GitHub OAuth 2.0                                              |
 
 ### 인프라
 
@@ -126,7 +126,7 @@ Webhook → FastAPI (수신 + 서명 검증)
     ↓
 Celery + Redis (비동기 큐에 작업 등록)
     ↓
-Worker (PR diff 파싱 → Claude API 호출)
+Worker (PR diff 파싱 → LLM API 호출, provider는 LLM_PROVIDER로 전환)
     ↓
 GitHub REST API (PR에 코멘트 등록)
     ↓
@@ -193,7 +193,13 @@ DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/ai_code_review
 # Redis
 REDIS_URL=redis://localhost:6379
 
-# Anthropic
+# LLM Provider 선택 (openai | claude)
+LLM_PROVIDER=openai
+
+# OpenAI
+OPENAI_API_KEY=
+
+# Anthropic (LLM_PROVIDER=claude일 때 사용, 추후 구현)
 ANTHROPIC_API_KEY=
 
 # 서비스
@@ -232,7 +238,7 @@ FRONTEND_URL=http://localhost:3000
 - [ ] DB 스키마 설계 (`users`, `repositories`, `reviews`, `review_comments`)
 - [ ] GitHub Webhook 수신 및 서명 검증 (`X-Hub-Signature-256`)
 - [ ] PR diff 파싱 로직
-- [ ] Claude API 프롬프트 설계 (심각도 분류 기준 포함)
+- [ ] LLM 프롬프트 설계 (심각도 분류 기준 포함, provider 공통 사용 가능하도록)
 - [ ] Celery Worker 구조
 - [ ] 리뷰 결과 심각도 분류 스펙 (Critical / Warning / Info 기준 정의)
 - [ ] 대시보드 UI 설계
