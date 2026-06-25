@@ -4,6 +4,7 @@ import hmac
 from fastapi import APIRouter, Header, HTTPException, Request
 
 from app.core.config import settings
+from app.services.pr_review import process_pull_request_event
 
 router = APIRouter()
 
@@ -25,6 +26,11 @@ async def github_webhook(
     payload = await request.json()
 
     if x_github_event == "pull_request" and payload.get("action") in ("opened", "synchronize"):
-        print(f"PR #{payload['number']} {payload['action']} - {payload['pull_request']['title']}")
+        process_pull_request_event.delay(
+            repo_full_name=payload["repository"]["full_name"],
+            pr_number=payload["number"],
+            action=payload["action"],
+            title=payload["pull_request"]["title"],
+        )
 
     return {"status": "received"}
