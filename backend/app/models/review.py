@@ -12,6 +12,8 @@ class Review(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     repo_full_name: Mapped[str]
     pr_number: Mapped[int]
+    title: Mapped[str]
+    author: Mapped[str]
     summary: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 

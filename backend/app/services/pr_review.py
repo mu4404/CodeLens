@@ -9,11 +9,13 @@ from app.core.database import async_session
 from app.models import Review, ReviewIssue
 
 
-async def _save_review(repo_full_name: str, pr_number: int, review_data: dict) -> None:
+async def _save_review(repo_full_name: str, pr_number: int, title: str, author: str, review_data: dict) -> None:
     async with async_session() as session:
         review = Review(
             repo_full_name=repo_full_name,
             pr_number=pr_number,
+            title=title,
+            author=author,
             summary=review_data["summary"],
         )
         session.add(review)
@@ -39,14 +41,14 @@ def _format_comment(review_data: dict) -> str:
 
 
 @celery_app.task
-def process_pull_request_event(repo_full_name: str, pr_number: int, action: str, title: str):
+def process_pull_request_event(repo_full_name: str, pr_number: int, action: str, title: str, author: str):
     diff_url = f"https://api.github.com/repos/{repo_full_name}/pulls/{pr_number}"
     response = httpx.get(diff_url, headers={"Accept": "application/vnd.github.v3.diff"})
     diff_text = response.text
 
     review_data = generate_code_review(diff_text)
 
-    asyncio.run(_save_review(repo_full_name, pr_number, review_data))
+    asyncio.run(_save_review(repo_full_name, pr_number, title, author, review_data))
 
     comment_url = f"https://api.github.com/repos/{repo_full_name}/issues/{pr_number}/comments"
     httpx.post(

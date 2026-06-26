@@ -31,6 +31,7 @@ async def github_webhook(
             pr_number=payload["number"],
             action=payload["action"],
             title=payload["pull_request"]["title"],
+            author=payload["pull_request"]["user"]["login"],
         )
 
     return {"status": "received"}
