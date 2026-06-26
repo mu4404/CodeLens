@@ -1,4 +1,5 @@
 import { apiFetch } from "@/lib/api";
+import { formatRelativeTime } from "@/lib/format";
 
 interface ReviewIssue {
   id: number;
@@ -54,7 +55,9 @@ export default async function ReviewDetailPage({
       <h2 className="text-[27px] font-bold tracking-tight mb-6">
         {review.title}
       </h2>
-      <div className="text-sm text-muted mb-6">{review.author}</div>
+      <div className="text-sm text-muted mb-6">
+        {review.author} · {formatRelativeTime(review.created_at)}
+      </div>
       <p className="text-[15px] text-muted mb-8">{review.summary}</p>
       {Array.from(issuesByFile.entries()).map(([file, issues]) => (
         <div
