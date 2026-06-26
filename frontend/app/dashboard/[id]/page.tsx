@@ -13,6 +13,8 @@ interface ReviewDetail {
   id: number;
   repo_full_name: string;
   pr_number: number;
+  title: string;
+  author: string;
   summary: string;
   created_at: string;
   issues: ReviewIssue[];
@@ -49,8 +51,11 @@ export default async function ReviewDetailPage({
       <div className="font-mono text-xs text-muted mb-2">
         {review.repo_full_name} #{review.pr_number}
       </div>
+      <h2 className="text-[27px] font-bold tracking-tight mb-6">
+        {review.title}
+      </h2>
+      <div className="text-sm text-muted mb-6">{review.author}</div>
       <p className="text-[15px] text-muted mb-8">{review.summary}</p>
-
       {Array.from(issuesByFile.entries()).map(([file, issues]) => (
         <div
           key={file}
