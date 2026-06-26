@@ -88,3 +88,4 @@ CodeLens/
 ```
 
 자세한 아키텍처/설계 결정은 [CLAUDE.md](./CLAUDE.md)에 정리되어 있습니다.
+# test module 9
