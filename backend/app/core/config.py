@@ -40,6 +40,7 @@ class Settings(BaseSettings):
 
     # 서비스
     frontend_url: str = "http://localhost:3000"
+    webhook_base_url: str = "http://localhost:8000"
 
 
 settings = Settings()

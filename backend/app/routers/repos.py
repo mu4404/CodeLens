@@ -51,13 +51,13 @@ async def connect_repo(body: dict, user: dict = Depends(get_current_user)):
     if not repo_full_name:
         raise HTTPException(status_code=400, detail="repo_full_name이 필요합니다")
 
-    webhook_url = f"{settings.frontend_url.replace('3000', '8000')}/webhook/github"
+    webhook_url = f"{settings.webhook_base_url}/webhook/github"
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
             f"https://api.github.com/repos/{repo_full_name}/hooks",
             headers={
-                "Authorization": f"Bearer {settings.github_bot_token}",
+                "Authorization": f"Bearer {user['access_token']}",
                 "Accept": "application/vnd.github+json",
             },
             json={
