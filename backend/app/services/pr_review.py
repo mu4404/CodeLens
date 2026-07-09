@@ -10,7 +10,13 @@ from app.models import Review, ReviewIssue
 
 
 async def _save_review(repo_full_name: str, pr_number: int, title: str, author: str, review_data: dict) -> None:
-    async with async_session() as session:
+    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+    from app.core.config import settings
+
+    engine = create_async_engine(settings.database_url)
+    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+
+    async with session_factory() as session:
         review = Review(
             repo_full_name=repo_full_name,
             pr_number=pr_number,
@@ -25,6 +31,8 @@ async def _save_review(repo_full_name: str, pr_number: int, title: str, author: 
             session.add(ReviewIssue(review_id=review.id, **issue))
 
         await session.commit()
+
+    await engine.dispose()
 
 
 def _format_comment(review_data: dict) -> str:
